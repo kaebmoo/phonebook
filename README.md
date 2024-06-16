@@ -62,39 +62,38 @@ WEBHOOK_URL=xxxxxxxxxx (can use a UUID)
 - The rest are unused, they are just example programs.
 
 
-                                                                                             
-                                                                                          
                                                                                         
-                        https://host.domain.com/webhook/xxxxx                           
-     telegram server    nginx for reverse proxy                                         
-     ┌──────┐          ┌──────┐         ┌───────┐                                       
-     │      │          │      │         │       │                                       
-     │      │◄────────►│      │         │       │ http://127.0.0.1:8080                 
-     │      │          │      │◄───────►│       │ Web hook server NodeJS or Flask       
-     └──────┘          └──────┘         └───┬───┘                                       
-         ▲                                  │                                           
-         │                                  │                                           
-         │                                  │                                           
-         │                                  │                                           
-         │                                  ▼                                           
-         │                              ┌───────┐                                       
-         │                              │       │                                       
-         │                              │       │ mail.server                           
-         │                              │       │                                       
-         │                              └───┬───┘                                       
-         │                                  │                                           
-         │                                  │                                           
-         │                                  │                                           
-         │                                  │                                           
-         │                                  │                                           
-         │                                  │                                           
-         ▼telegram app                      │                                           
-      ┌──────┐                              │                                           
-      │      │                              │                                           
-      │      │  BotFather                   │                                           
-      │      │  /newbot - create a new bot  │                                           
-      └──────┘                              │                                           
-           /register email@address          │                                           
-           /activate code  ◄────────────────┘                                           
+                                                                                        
+     telegram         https://host.domain.com/webhook/xxxxx                             
+     server           nginx for reverse proxy                                           
+     ┌──────┐        ┌──────┐      ┌──────┐                                             
+     │      │        │      │      │      │                                             
+     │      │◄──────►│      │      │      │ http://127.0.0.1:8080                       
+     │      │        │      ├──────┤      │ Web hook server NodeJS or Flask             
+     └──────┘        └──────┘      └───┬──┘                                             
+         ▲                             │                                                
+         │                             │                                                
+         │                             │                                                
+         │                             │                                                
+         │                             │                                                
+         │                         ┌───┴──┐                                             
+         │                         │      │ mail.server                                 
+         │                         │      │                                             
+         │                         │      │                                             
+         │                         └──┬───┘                                             
+         │                            │                                                 
+         │                            │                                                 
+         │                            │                                                 
+         │                            │                                                 
+         │                            │                                                 
+         │                            │                                                 
+         ▼telegram app                │                                                 
+      ┌──────┐                        │                                                 
+      │      │                        │                                                 
+      │      │  BotFather             │                                                 
+      │      │  /newbot - create a new│bot                                              
+      └──────┘                        │                                                 
+           /register email@address    │                                                 
+           /activate code  ◄──────────┘                                                 
                                                                                         
                                                                                         
