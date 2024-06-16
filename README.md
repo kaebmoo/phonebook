@@ -15,18 +15,15 @@
 
 ### รายละเอียดไฟล์ .env
 
-YOUR_TELEGRAM_BOT_TOKEN=xxxxx token ที่ได้จากการสร้าง telegram bot ใน
-BotFather
-
+```
+YOUR_TELEGRAM_BOT_TOKEN=xxxxx # token obtained from creating a Telegram bot in BotFather
 YOUR_CSV_FILE=Phonebook.csv
-
 DEBUG_MODE=false
-
 EMAIL_USER=user@domain.com
+EMAIL_PASS=xxxxx # password of the email used for sending
+WEBHOOK_URL=xxxxxxxxxx # can use a UUID
+```
 
-EMAIL_PASS=xxxxx รหัสผ่านของ email ที่จะใช้ส่ง
-
-WEBHOOK_URL=xxxxxxxxxx ใช้เป็น uuid ก็ได้
 
 # Phone Book
 
