@@ -63,7 +63,7 @@ WEBHOOK_URL=xxxxxxxxxx (can use a UUID)
 
 
                                                                                         
-                                                                                        
+```                                                                                        
      telegram         https://host.domain.com/webhook/xxxxx                             
      server           nginx for reverse proxy                                           
      ┌──────┐        ┌──────┐      ┌──────┐                                             
@@ -96,4 +96,4 @@ WEBHOOK_URL=xxxxxxxxxx (can use a UUID)
            /register email@address    │                                                 
            /activate code  ◄──────────┘                                                 
                                                                                         
-                                                                                        
+```                                                                                        
