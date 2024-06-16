@@ -109,7 +109,7 @@ upstream node_app {
 server {
     listen 443 ssl;
     
-    server_name centraldigital.cattelecom.com;
+    server_name host.domain.com;
     ssl_certificate_key /etc/letsencrypt/live/host.domain.com/privkey.pem; # managed by Certbot
     ssl_certificate /etc/letsencrypt/live/host.domain.com/fullchain.pem; # managed by Certbot
     ssl_protocols TLSv1.2 TLSv1.3;
