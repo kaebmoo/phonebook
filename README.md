@@ -64,38 +64,39 @@ WEBHOOK_URL=xxxxxxxxxx (can use a UUID)
 
                                                                                              
                                                                                              
-                            https://host.domain.com       http://127.0.0.1:8080              
-    telegram server         nginx for reverse proxy       Web hook server NodeJS or Flask    
-    ┌────────────┐          ┌───────────────┐             ┌───────────────┐                  
-    │            │          │               │             │               │                  
-    │            │          │               │             │               │                  
-    │            │◄────────►│               │◄───────────►│               │                  
-    │            │          │               │             │               │                  
-    │            │          │               │             │               │                  
-    └────────────┘          └───────────────┘             └───────┬───────┘                  
-        ▲                                                         │                          
-        │                                                         │                          
-        │                                                         ▼                          
-        │                                                 ┌───────────────┐                  
-        │                                                 │               │                  
-        │                                                 │               │                  
-        │                                                 │  mail.server  │                  
-        │                                                 │               │                  
-        │                                                 │               │                  
-        │                                                 │               │                  
-        │                                                 └───────┬───────┘                  
-        │                                                         │                          
-        │                                                         │                          
-        │                                                         │                          
-        ▼telegram app                                             │                          
-     ┌──────┐                                                     │                          
-     │      │                                                     │                          
-     │      │  BotFather                                          │                          
-     │      │  /newbot - create a new bot                         │                          
-     │      │                                                     │                          
-     │      │                                                     │                          
-     └──────┘                                                     │                          
-          /register email@address                                 │                          
-          /activate code  ◄───────────────────────────────────────┘                          
-                                                                                             
-                                                                                             
+                                                                                           
+                                                                                         
+                         https://host.domain.com                                         
+      telegram server    nginx for reverse proxy                                         
+      ┌──────┐          ┌──────┐         ┌───────┐                                       
+      │      │          │      │         │       │                                       
+      │      │◄────────►│      │         │       │ http://127.0.0.1:8080                 
+      │      │          │      │◄───────►│       │ Web hook server NodeJS or Flask       
+      └──────┘          └──────┘         └───┬───┘                                       
+          ▲                                  │                                           
+          │                                  │                                           
+          │                                  │                                           
+          │                                  │                                           
+          │                                  ▼                                           
+          │                              ┌───────┐                                       
+          │                              │       │                                       
+          │                              │       │ mail.server                           
+          │                              │       │                                       
+          │                              └───┬───┘                                       
+          │                                  │                                           
+          │                                  │                                           
+          │                                  │                                           
+          │                                  │                                           
+          │                                  │                                           
+          │                                  │                                           
+          ▼telegram app                      │                                           
+       ┌──────┐                              │                                           
+       │      │                              │                                           
+       │      │  BotFather                   │                                           
+       │      │  /newbot - create a new bot  │                                           
+       └──────┘                              │                                           
+            /register email@address          │                                           
+            /activate code  ◄────────────────┘                                           
+                                                                                         
+                                                                                         
+                                                                                         
