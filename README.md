@@ -100,3 +100,32 @@ WEBHOOK_URL=xxxxxxxxxx (can use a UUID)
                                                                         
                              
 ```                                                                                        
+- config for nginx reverse proxy
+```
+upstream node_app {
+        server localhost:8181;  # พอร์ตของแอปพลิเคชัน Node.js or Flask phonebook
+}
+
+server {
+    listen 443 ssl;
+    
+    server_name centraldigital.cattelecom.com;
+    ssl_certificate_key /etc/letsencrypt/live/host.domain.com/privkey.pem; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/host.domain.com/fullchain.pem; # managed by Certbot
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
+    ssl_prefer_server_ciphers off;
+
+
+    location /webhook/xxxxx {
+            proxy_pass http://node_app;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+    }
+
+}
+
+```
