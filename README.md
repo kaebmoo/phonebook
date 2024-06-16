@@ -24,6 +24,9 @@ EMAIL_PASS=xxxxx รหัสผ่านของ email ที่จะใช�
 WEBHOOK_URL=xxxxxxxxxx ใช้เป็น uuid ก็ได้
 ```
 
+-    app.js โปรแกรมที่ทำด้วย NodeJS
+-    main.py โปรแกรมที่ทำด้วย Flask
+-    ที่เหลือไม่ได้ใช้ เป็นแค่โปรแกรมตัวอย่าง
 
 # Phone Book
 
@@ -49,3 +52,7 @@ EMAIL_USER=user@domain.com
 EMAIL_PASS=xxxxx (password of the email used for sending)
 WEBHOOK_URL=xxxxxxxxxx (can use a UUID)
 ```
+
+- `app.js`: NodeJS program.
+- `main.py`: Flask program.
+- The rest are unused, they are just example programs.
