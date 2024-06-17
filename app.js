@@ -171,7 +171,7 @@ const isDebugMode = process.env.DEBUG_MODE === 'true';
 
 const webhookUrl = process.env.WEBHOOK_URL;
 
-app.post(`/webhook/${webhookUrl}`, (req, res) => {
+app.post(`/webhook/${webhookUrl}`, async (req, res) => {
   const query = req.body.message.text;  // ดึงข้อความจาก Telegram
 
   const message = req.body.message;
@@ -179,15 +179,19 @@ app.post(`/webhook/${webhookUrl}`, (req, res) => {
   const userId = message.from.id;
   const text = message.text.trim();
 
+  if (text === '/start') {
+    await sendToTelegram(chatId, 'ยินดีต้อนรับสู่ bot ของเรา! \n/register email - เพื่อลงทะเบียน, \n/activate code - เพื่อยืนยันการลงทะเบียนตามรหัสที่ได้รับจาก email');
+  }
+
   if (text.startsWith('/register ')) {
     const email = text.split(' ')[1];
     if (!email || !email.endsWith('@ntplc.co.th')) {
-      sendToTelegram(chatId, 'กรุณาใส่อีเมลที่ถูกต้องและใช้ domain @ntplc.co.th เท่านั้น');
+      await sendToTelegram(chatId, 'กรุณาใส่อีเมลที่ถูกต้องและใช้ domain @ntplc.co.th เท่านั้น');
       return res.sendStatus(200);
     }
 
     if (registeredUsers.has(userId.toString()) && registeredUsers.get(userId.toString()).activated) {
-      sendToTelegram(chatId, 'คุณได้ลงทะเบียนและยืนยันแล้ว สามารถใช้งาน bot ได้เลย');
+      await sendToTelegram(chatId, 'คุณได้ลงทะเบียนและยืนยันแล้ว สามารถใช้งาน bot ได้เลย');
       return res.sendStatus(200);
     }
 
@@ -212,7 +216,7 @@ app.post(`/webhook/${webhookUrl}`, (req, res) => {
     const user = registeredUsers.get(userId.toString());
 
     if (!user) {
-      sendToTelegram(chatId, 'คุณยังไม่ได้ลงทะเบียน: \nสามารถลงทะเบียนโดยใช้ email ของคุณด้วยคำสั่ง /register email@address');
+      await sendToTelegram(chatId, 'คุณยังไม่ได้ลงทะเบียน: \nสามารถลงทะเบียนโดยใช้ email ของคุณด้วยคำสั่ง /register email@address');
       return res.sendStatus(200);
     }
 
@@ -220,9 +224,9 @@ app.post(`/webhook/${webhookUrl}`, (req, res) => {
       user.activated = true;
       registeredUsers.set(userId.toString(), user);
       saveRegisteredUsers();
-      sendToTelegram(chatId, 'การยืนยันสำเร็จ คุณสามารถใช้งาน bot ได้แล้ว');
+      await sendToTelegram(chatId, 'การยืนยันสำเร็จ คุณสามารถใช้งาน bot ได้แล้ว');
     } else {
-      sendToTelegram(chatId, 'รหัสยืนยันไม่ถูกต้อง');
+      await sendToTelegram(chatId, 'รหัสยืนยันไม่ถูกต้อง');
     }
 
     return res.sendStatus(200);
@@ -230,23 +234,23 @@ app.post(`/webhook/${webhookUrl}`, (req, res) => {
 
   const user = registeredUsers.get(userId.toString());
   if (!user || !user.activated) {
-    sendToTelegram(chatId, "คุณต้องลงทะเบียนและยืนยันด้วยรหัสที่ได้รับทาง email ก่อนจึงจะสามารถใช้งาน bot นี้ได้: \nด้วยคำสั่ง /register email@address\nและยืนยันด้วย code ที่ได้รับทาง email ด้วยคำสั่ง /activate code");
+    await sendToTelegram(chatId, "คุณต้องลงทะเบียนและยืนยันด้วยรหัสที่ได้รับทาง email ก่อนจึงจะสามารถใช้งาน bot นี้ได้: \nด้วยคำสั่ง /register email@address\nและยืนยันด้วย code ที่ได้รับทาง email ด้วยคำสั่ง /activate code");
     return res.sendStatus(200);
   }
 
    // เพิ่มการตรวจสอบความยาวของ query
    if (text.length < 2) {
-    sendToTelegram(chatId, "กรุณาป้อนข้อความค้นหาที่มีความยาวอย่างน้อย 2 ตัวอักษร");
+    await sendToTelegram(chatId, "กรุณาป้อนข้อความค้นหาที่มีความยาวอย่างน้อย 2 ตัวอักษร");
     return res.sendStatus(200);
   }
 
   if (/^\d+$/.test(text) && text.length < 9) {
-    sendToTelegram(chatId, "กรุณาป้อนหมายเลขที่มีความยาวอย่างน้อย 9 ตัวอักษร");
+    await sendToTelegram(chatId, "กรุณาป้อนหมายเลขที่มีความยาวอย่างน้อย 9 ตัวอักษร");
     return res.sendStatus(200);
   }
 
   if (text.includes("@ntplc.co.th")) {
-    sendToTelegram(chatId, "ผลการค้นหามีมากเกินไป. กรุณาป้อนข้อความค้นหาที่เฉพาะเจาะจงมากขึ้น.");
+    await sendToTelegram(chatId, "ผลการค้นหามีมากเกินไป. กรุณาป้อนข้อความค้นหาที่เฉพาะเจาะจงมากขึ้น.");
     return res.sendStatus(200);
   }
 
@@ -255,7 +259,7 @@ app.post(`/webhook/${webhookUrl}`, (req, res) => {
 
   const MAX_RESULTS = 100;
   if (results.length > MAX_RESULTS) {
-    sendToTelegram(chatId, `ผลการค้นหามีมากเกินไป (${results.length} รายการ). กรุณาป้อนข้อความค้นหาที่เฉพาะเจาะจงมากขึ้น.`);
+    await sendToTelegram(chatId, `ผลการค้นหามีมากเกินไป (${results.length} รายการ). กรุณาป้อนข้อความค้นหาที่เฉพาะเจาะจงมากขึ้น.`);
     return res.sendStatus(200);
   }
 
