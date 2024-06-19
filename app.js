@@ -110,6 +110,7 @@ function searchContact(query) {
     return contact['ชื่อ-นามสกุล'].includes(query) ||
            contact['e-mail'].includes(query) ||
            contact['โทรศัพท์'].includes(query) ||
+           contact['มือถือ'].includes(query) ||
            contact['ต.บริหาร'].includes(query) ||
            contact['ส่วนงาน'].includes(query) ||
            contact['ชื่อเต็มส่วนงาน'].includes(query);
@@ -272,6 +273,7 @@ app.post(`/webhook/${webhookUrl}`, async (req, res) => {
       responseText += `ตำแหน่ง: ${row['ตำแหน่ง']}\n`;
       responseText += `อีเมล: ${row['e-mail']}\n`;
       responseText += `ส่วนงาน: ${row['ชื่อเต็มส่วนงาน']}\n`;
+      responseText += `mobile: ${row['มือถือ']}\n`;
       responseText += `โทรศัพท์: ${row['โทรศัพท์']}\n\n`;
     });
     responseText += `พบข้อมูลที่ตรงกัน ${results.length} รายการ.\n\n`;
