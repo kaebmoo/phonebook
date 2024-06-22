@@ -13,6 +13,10 @@ app.use(bodyParser.json());
 
 const registeredUsersFile = path.join(__dirname, 'registeredUsers.json');
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // ฟังก์ชันอ่านข้อมูลจากไฟล์ JSON
 function loadRegisteredUsers() {
   try {
@@ -136,6 +140,14 @@ async function sendToTelegram(chatId, text) {
         console.log(`Debug message to ${chatId}: \n${text}`);
     }
   }
+
+// Define an async function to send messages with delay
+async function sendMessagesWithDelay(chatId, messages) {
+  for (const message of messages) {
+    sendToTelegram(chatId, message);
+    await sleep(200); // Delay for 200 milliseconds
+  }
+}
 
 // ฟังก์ชันแบ่งข้อความเป็นส่วนย่อย
 function splitMessage(text, maxLength) {
@@ -282,9 +294,14 @@ app.post(`/webhook/${webhookUrl}`, async (req, res) => {
   }
 
   const messages = splitMessage(responseText, 4096);
+  /*
   messages.forEach(message => {
     sendToTelegram(chatId, message);
   });
+  */
+
+  // Call the function with your chatId and messages. sendToTelegram
+  sendMessagesWithDelay(chatId, messages);
 
   res.sendStatus(200);
 });
