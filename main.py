@@ -10,6 +10,7 @@ from flask import Flask, request, jsonify
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from threading import Lock
+import time
 
 app = Flask(__name__)
 
@@ -226,6 +227,7 @@ def webhook():
     messages = split_message(response_text, 4096)
     for message in messages:
         send_to_telegram(chat_id, message)
+        time.sleep(0.2)
 
     return jsonify(status='success')
 
