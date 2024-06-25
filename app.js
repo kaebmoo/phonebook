@@ -284,7 +284,7 @@ app.post(`/webhook/${webhookUrl}`, async (req, res) => {
       responseText += `ชื่อ-อังกฤษ: ${row['ชื่อ-อังกฤษ']} ${row['นามสกุล-อังกฤษ']}\n`;
       responseText += `ตำแหน่ง: ${row['ตำแหน่ง']}\n`;
       responseText += `อีเมล: ${row['e-mail']}\n`;
-      responseText += `ส่วนงาน: ${row['ชื่อเต็มส่วนงาน']}\n`;
+      responseText += `ส่วนงาน: ${row['ชื่อเต็มส่วนงาน']}, ${row['ส่วนงาน']}\n`;
       responseText += `mobile: ${row['มือถือ']}\n`;
       responseText += `โทรศัพท์: ${row['โทรศัพท์']}\n\n`;
     });
