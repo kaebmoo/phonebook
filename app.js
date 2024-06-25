@@ -7,11 +7,25 @@ const axios = require('axios');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const writeFileAtomic = require('write-file-atomic');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 app.use(bodyParser.json());
 
+
 const registeredUsersFile = path.join(__dirname, 'registeredUsers.json');
+
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 15 minutes
+  max: 2400, // limit each IP to 2400 requests per windowMs
+});
+/* 
+สำหรับผู้ใช้งาน 12,000 คน โอกาสในการใช้งานต่อนาทีเท่ากับ 20%
+จำนวนผู้ใช้ที่ใช้งานในหนึ่งนาที = 12,000 * 0.2 = 2,400 คน 
+สมมติว่าผู้ใช้แต่ละคนสามารถส่งคำขอได้ 1 ครั้งในหนึ่งนาที (สามารถปรับได้ตามความเป็นจริง) ดังนั้น จำนวนคำขอทั้งหมดในหนึ่งนาที = 2,400 * 1 = 2,400 requests
+windowMs เป็น 1 นาที (60 * 1000 ms), จำนวน requests ที่เหมาะสมต่อ 1 นาที = 2,400 requests
+*/
+app.use(limiter); // apply to all requests
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -268,8 +282,15 @@ app.post(`/webhook/${webhookUrl}`, async (req, res) => {
   }
 
   console.log('Received query:', text);
-  const results = searchContact(text);
-
+  let results;
+  /* ขำ ขำ เอาฮา */
+  if (text === "สุดหล่อ") {
+    results = searchContact("นิวัตยะกุล");
+  }
+  else {
+    results = searchContact(text);
+  }
+  
   const MAX_RESULTS = 100;
   if (results.length > MAX_RESULTS) {
     await sendToTelegram(chatId, `ผลการค้นหามีมากเกินไป (${results.length} รายการ). กรุณาป้อนข้อความค้นหาที่เฉพาะเจาะจงมากขึ้น.`);

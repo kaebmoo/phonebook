@@ -11,8 +11,17 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from threading import Lock
 import time
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
+
+# กำหนด Limiter โดยใช้ get_remote_address เพื่อระบุ IP ของผู้ใช้
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["100 per hour"]
+)
 
 # กำหนดตัวแปรสำหรับจัดการไฟล์และข้อมูลผู้ใช้ที่ลงทะเบียน
 registered_users_file = 'registeredUsersFlask.json'
@@ -135,6 +144,7 @@ is_debug_mode = os.getenv('DEBUG_MODE') == 'true'
 webhook_url = os.getenv('WEBHOOK_URL')
 
 @app.route(f'/webhook/{webhook_url}', methods=['POST'])
+@limiter.limit("2400 per minute")  # จำกัด 10 requests ต่อ 1 นาที
 def webhook():
     data = request.json
     message = data.get('message')
@@ -216,7 +226,7 @@ def webhook():
             response_text += f"ชื่อ-อังกฤษ: {row['ชื่อ-อังกฤษ']} {row['นามสกุล-อังกฤษ']}\n"
             response_text += f"ตำแหน่ง: {row['ตำแหน่ง']}\n"
             response_text += f"อีเมล: {row['e-mail']}\n"
-            response_text += f"ส่วนงาน: {row['ชื่อเต็มส่วนงาน']}\n"
+            response_text += f"ส่วนงาน: {row['ชื่อเต็มส่วนงาน']}, {row['ส่วนงาน']}\n"
             response_text += f"โทรศัพท์: {row['โทรศัพท์']}\n\n"
         response_text += f"พบข้อมูลที่ตรงกัน {len(results)} รายการ.\n\n"
     else:
